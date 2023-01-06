@@ -10,19 +10,20 @@ app.use(cors());
 
 app.post("/sign-up", (req, res) => {
   const data = req.body;
-  users.push(data)
+  users.push(data);
   res.send("OK");
 });
 
 app.post("/tweets", (req, res) => {
-	const data = req.body
-	const user = users.find(u => u.username === data.username)
+  const data = req.body;
+  const user = users.find((u) => u.username === data.username);
   if (!user) {
     res.sendStatus(401, "UNAUTHORIZED");
     return;
   }
-	tweets.push({...data, avatar: user.avatar})
-	res.send("OK")
+  if (tweets.length >= 10) tweets.splice(0, 1);
+  tweets.push({ ...data, avatar: user.avatar });
+  res.send("OK");
 });
 
 app.get("/tweets", (req, res) => {
