@@ -38,6 +38,12 @@ app.get("/tweets", (req, res) => {
   res.send(tweets);
 });
 
+app.get("/tweets/:username", (req, res) => {
+	const {username} = req.params
+	const filteredTweets = tweets.filter(t => t.username === username)
+	res.send(filteredTweets)
+}) 
+
 app.listen(PORT, () => {
   console.log(`app initialized on port ${PORT}`);
 });
