@@ -35,8 +35,8 @@ app.post("/tweets", (req, res) => {
 });
 
 app.get("/tweets", (req, res) => {
-  const page = Number(req.query.page);
-  if (!page || page < 1) {
+  const page = req.query.page ? Number(req.query.page) : 1;
+  if (page < 1) {
     res.sendStatus(400, "Informe uma página válida!");
     return;
   }
@@ -44,16 +44,16 @@ app.get("/tweets", (req, res) => {
     TWEETS_PER_PAGE * (page - 1),
     page * TWEETS_PER_PAGE - 1,
   ];
-  const tweetsSpan = tweets
+  const tweetsSpan = [...tweets]
     .reverse()
     .filter((t, index) => index >= inferiorLimit && index <= superiorLimit);
-  res.send(tweetsSpan);
+  res.sendStatus(200, tweetsSpan);
 });
 
 app.get("/tweets/:username", (req, res) => {
   const { username } = req.params;
   const tweetsFromUser = tweets.filter((t) => t.username === username);
-  res.send(tweetsFromUser);
+  res.sendStatus(200, tweetsFromUser);
 });
 
 app.listen(PORT, () => {
