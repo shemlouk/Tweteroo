@@ -11,7 +11,10 @@ app.use(cors());
 
 app.post("/sign-up", (req, res) => {
   const data = req.body;
-  if (!data.username || !data.avatar) {
+  const isNotAString =
+    typeof data.username !== "string" || typeof data.avatar !== "string";
+  const isEmpty = !data.username || !data.avatar;
+  if (isEmpty || isNotAString) {
     res.sendStatus(400, "Todos os campos são obrigatórios!");
     return;
   }
@@ -22,7 +25,7 @@ app.post("/sign-up", (req, res) => {
 app.post("/tweets", (req, res) => {
   const data = req.body;
   const username = req.get("user");
-  if (!username || !data.tweet) {
+  if (!username || !data.tweet || typeof data.tweet !== "string") {
     res.sendStatus(400, "Todos os campos são obrigatórios!");
     return;
   }
