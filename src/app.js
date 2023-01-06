@@ -21,16 +21,17 @@ app.post("/sign-up", (req, res) => {
 
 app.post("/tweets", (req, res) => {
   const data = req.body;
-  if (!data.username || !data.tweet) {
+  const username = req.get("user");
+  if (!username || !data.tweet) {
     res.sendStatus(400, "Todos os campos são obrigatórios!");
     return;
   }
-  const user = users.find((u) => u.username === data.username);
+  const user = users.find((u) => u.username === username);
   if (!user) {
     res.sendStatus(401, "UNAUTHORIZED");
     return;
   }
-  tweets.push({ ...data, avatar: user.avatar });
+  tweets.push({ ...user, tweet: data.tweet });
   res.sendStatus(201, "OK");
 });
 
@@ -47,13 +48,13 @@ app.get("/tweets", (req, res) => {
   const tweetsSpan = [...tweets]
     .reverse()
     .filter((t, index) => index >= inferiorLimit && index <= superiorLimit);
-  res.sendStatus(200, tweetsSpan);
+  res.status(200).json(tweetsSpan);
 });
 
 app.get("/tweets/:username", (req, res) => {
   const { username } = req.params;
   const tweetsFromUser = tweets.filter((t) => t.username === username);
-  res.sendStatus(200, tweetsFromUser);
+  res.status(200).json(tweetsFromUser);
 });
 
 app.listen(PORT, () => {
