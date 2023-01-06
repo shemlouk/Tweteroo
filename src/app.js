@@ -10,12 +10,20 @@ app.use(cors());
 
 app.post("/sign-up", (req, res) => {
   const data = req.body;
+	if (!data.username || !data.avatar) {
+		res.sendStatus(400, "Todos os campos são obrigatórios!")
+		return
+	}
   users.push(data);
   res.send("OK");
 });
 
 app.post("/tweets", (req, res) => {
   const data = req.body;
+	if (!data.username || !data.tweet) {
+		res.sendStatus(400, "Todos os campos são obrigatórios!")
+		return
+	}
   const user = users.find((u) => u.username === data.username);
   if (!user) {
     res.sendStatus(401, "UNAUTHORIZED");
