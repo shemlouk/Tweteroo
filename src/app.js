@@ -1,24 +1,34 @@
-import express from "express"
-import cors from "cors"
+import express from "express";
+import cors from "cors";
 
-const [USER, tweets] = [{}, []]
+const [user, tweets] = [{}, []];
+const PORT = 5000;
 
-const PORT = 5000
-const app = express()
-app.use(cors())
-app.use(express.json())
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 app.post("/sign-up", (req, res) => {
+  const data = req.body;
+  user.username = data.username;
+  user.avatar = data.avatar;
+  res.send(user);
+});
+
+app.post("/tweets", (req, res) => {
+  if (!user.username) {
+    res.sendStatus(401, "UNAUTHORIZED");
+    return;
+  }
 	const data = req.body
-	USER.username = data.username
-	USER.avatar = data.avatar
-	res.send(USER)
-})
+	tweets.push({...data, avatar: user.avatar})
+	res.send("OK")
+});
 
 app.get("/tweets", (req, res) => {
-	res.send(tweets)
-})
+  res.send(tweets);
+});
 
 app.listen(PORT, () => {
-  console.log(`app initialized on port ${PORT}`)
-})
+  console.log(`app initialized on port ${PORT}`);
+});
