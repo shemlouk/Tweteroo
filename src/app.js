@@ -15,7 +15,7 @@ app.post("/sign-up", (req, res) => {
 		return
 	}
   users.push(data);
-  res.send("OK");
+  res.sendStatus(201, "OK");
 });
 
 app.post("/tweets", (req, res) => {
@@ -31,7 +31,7 @@ app.post("/tweets", (req, res) => {
   }
   if (tweets.length >= 10) tweets.splice(0, 1);
   tweets.push({ ...data, avatar: user.avatar });
-  res.send("OK");
+  res.sendStatus(201, "OK");
 });
 
 app.get("/tweets", (req, res) => {
